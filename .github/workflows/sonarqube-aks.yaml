@@ -1,0 +1,62 @@
+name: Deploy SonarQube to AKS
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-sonarqube:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set up Azure CLI
+        run: |
+          az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Get AKS Credentials
+        run: |
+          az aks get-credentials --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AKS_CLUSTER_NAME }}
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 'latest'
+
+      - name: Add SonarQube Helm repository
+        run: |
+          helm repo add sonarqube https://SonarSource.github.io/helm-chart-sonarqube
+          helm repo update
+
+      - name: Deploy SonarQube
+        run: |
+          helm upgrade --install sonarqube sonarqube/sonarqube \
+            --namespace sonarqube --create-namespace \
+            --set persistence.enabled=false \
+            --set postgresql.enabled=true \
+            --set postgresql.postgresqlUsername=sonar \
+            --set postgresql.postgresqlPassword=sonarpassword \
+            --set postgresql.postgresqlDatabase=sonarqube \
+            --set service.type=LoadBalancer
+
+      - name: Wait for SonarQube to become ready
+        run: |
+          kubectl wait --namespace sonarqube \
+            --for=condition=ready pod \
+            --selector=app=sonarqube \
+            --timeout=300s
+
+      - name: Get SonarQube Service External IP
+        run: |
+          kubectl get svc -n sonarqube
