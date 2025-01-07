@@ -1,0 +1,31 @@
+image:
+  repository: "sonarqube"
+  tag: "9.9.8-community"
+readinessProbe:
+  initialDelaySeconds: 500
+livenessProbe:
+  initialDelaySeconds: 500
+startupProbe:
+  initialDelaySeconds: 500
+
+    #service:
+  #  type: LoadBalancer
+
+OpenShift:
+  enabled: true
+  route:
+    enabled: true
+    path: "/"
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+    annotations:
+      haproxy.router.openshift.io/timeout: 1m
+
+postgresql:
+  securityContext:
+    enabled: false
+  containerSecurityContext:
+    enabled: false
+
+elasticsearch:
+  bootstrapChecks:  false
