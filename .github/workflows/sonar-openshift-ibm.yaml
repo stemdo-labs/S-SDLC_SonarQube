@@ -60,6 +60,6 @@ jobs:
         pwd
         ls -la
         helm repo add sonarqube https://SonarSource.github.io/helm-chart-sonarqube
-        helm upgrade --install my-sonarqube sonarqube/sonarqube -f values-sonar.yaml --set Openshift.route.host="sonar-default.${{steps.domain-step.outputs.dominio}}" --namespace sonarqube
+        helm upgrade --install my-sonarqube sonarqube/sonarqube -f values-sonar.yaml --set OpenShift.route.host="sonar-default.${{steps.domain-step.outputs.dominio}}" --namespace sonarqube
       working-directory: ./charts/sonarqube
     
