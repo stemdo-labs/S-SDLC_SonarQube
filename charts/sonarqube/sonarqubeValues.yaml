@@ -1,3 +1,5 @@
+jdbcOverwrite:
+  enabled: false
 service:
   type: LoadBalancer
 resources:
