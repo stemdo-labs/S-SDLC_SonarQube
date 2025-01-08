@@ -39,8 +39,10 @@ jobs:
           helm repo add sonarqube https://SonarSource.github.io/helm-chart-sonarqube
           helm repo update
 
+      - name: Create namespaceS
+        run: |
+          kubectl create namespace sonarqube
+
       - name: Deploy SonarQube
         run: |
-          helm upgrade --install sonarqube sonarqube/sonarqube \
-            --namespace sonarqube --create-namespace \
-            --set service.type=LoadBalancer
+          helm upgrade --install -n sonarqube sonarqube sonarqube/sonarqube -f charts/sonarqube/sonarqubeValues.yaml
