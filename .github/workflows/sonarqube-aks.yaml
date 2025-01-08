@@ -47,9 +47,9 @@ jobs:
       - name: Add SonarQube Helm repository
         run: |
           helm repo add sonarqube https://SonarSource.github.io/helm-chart-sonarqube
-          helm show values sonarqube/sonarqube
+          helm template --create-namespace -n sonarqube sonarqube sonarqube/sonarqube
           helm repo update
 
       - name: Deploy SonarQube
         run: |
-          helm upgrade --install sonarqube2 sonarqube/sonarqube --version 10.8.1 --create-namespace -n sonarqube
+          helm upgrade --install sonarqube2 sonarqube/sonarqube --create-namespace -n sonarqube -f sonarqubeValues.yaml

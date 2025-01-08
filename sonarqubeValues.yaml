@@ -1,5 +1,7 @@
 jdbcOverwrite:
   enabled: false
+  oracleJdbcDriver:
+    url: "https://download.oracle.com/otn-pub/otn_software/jdbc/2113/ojdbc11.jar"
 service:
   type: LoadBalancer
 resources:
