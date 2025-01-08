@@ -23,7 +23,7 @@ jobs:
       - name: Get AKS Credentials
         run: |
           az aks get-credentials --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AKS_CLUSTER_NAME }}
-          
+
           kubelogin convert-kubeconfig -l spn --client-id ${{ secrets.AZURE_CLIENT_ID }} --client-secret ${{ secrets.AZURE_CLIENT_SECRET }}
 
       - name: Set up kubectl
@@ -51,4 +51,4 @@ jobs:
 
       - name: Deploy SonarQube
         run: |
-          helm upgrade --install --create-namespace -n sonarqube sonarqube sonarqube/sonarqube
+          helm upgrade --install --create-namespace -n sonarqube sonarqube2 sonarqube/sonarqube
