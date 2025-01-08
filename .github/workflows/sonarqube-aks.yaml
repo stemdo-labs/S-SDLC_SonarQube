@@ -52,4 +52,4 @@ jobs:
 
       - name: Deploy SonarQube
         run: |
-          helm upgrade --install sonarqube2 sonarqube/sonarqube --create-namespace -n sonarqube -f sonarqubeValues.yaml
+          helm upgrade --install sonarqube2 sonarqube/sonarqube --create-namespace -n sonarqube -f sonarqubeValues.yaml --debug
