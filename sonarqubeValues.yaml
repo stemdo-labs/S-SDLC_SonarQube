@@ -1,0 +1,24 @@
+jdbcOverwrite:
+  enabled: false
+service:
+  type: LoadBalancer
+resources:
+  requests:
+    memory: "1Gi"
+    cpu: "800m"
+  limits:
+    memory: "2Gi"
+    cpu: "800m"
+image:
+  repository: "sonarqube"
+  tag: "9.9.8-community"
+readinessProbe:
+  initialDelaySeconds: 800
+livenessProbe:
+  initialDelaySeconds: 800
+startupProbe:
+  initialDelaySeconds: 800
+
+
+jdbcOverwrite:
+  enabled: false  
