@@ -21,6 +21,10 @@ OpenShift:
     annotations:
       haproxy.router.openshift.io/timeout: 1m
 
+setAdminPassword:
+  newPassword: stemdo
+  currentPassword: admin
+
 postgresql:
   securityContext:
     enabled: false
