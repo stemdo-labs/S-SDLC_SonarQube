@@ -38,6 +38,7 @@ jobs:
         run: |
           pwd
           ls -la
+          cat charts/sonarqube/sonarqubeValues.yaml
 
       - name: Add SonarQube Helm repository
         run: |
