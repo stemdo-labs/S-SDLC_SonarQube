@@ -45,4 +45,4 @@ jobs:
 
       - name: Deploy SonarQube
         run: |
-          helm upgrade --install -n sonarqube sonarqube sonarqube/sonarqube -f charts/sonarqube/sonarqubeValues.yaml
+          helm upgrade --install -n sonarqube sonarqube sonarqube/sonarqube -f charts/sonarqube/sonarqubeValues.yaml --debug
