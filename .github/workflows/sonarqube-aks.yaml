@@ -16,9 +16,9 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Set up Azure CLI
+      - name: Install kubelogin
         run: |
-          az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          sudo az aks install-cli
 
       - name: Get AKS Credentials
         run: |
@@ -49,14 +49,3 @@ jobs:
             --set postgresql.postgresqlPassword=sonarpassword \
             --set postgresql.postgresqlDatabase=sonarqube \
             --set service.type=LoadBalancer
-
-      - name: Wait for SonarQube to become ready
-        run: |
-          kubectl wait --namespace sonarqube \
-            --for=condition=ready pod \
-            --selector=app=sonarqube \
-            --timeout=300s
-
-      - name: Get SonarQube Service External IP
-        run: |
-          kubectl get svc -n sonarqube
