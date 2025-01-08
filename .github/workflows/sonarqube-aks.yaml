@@ -23,6 +23,8 @@ jobs:
       - name: Get AKS Credentials
         run: |
           az aks get-credentials --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AKS_CLUSTER_NAME }}
+          
+          kubelogin convert-kubeconfig -l spn --client-id ${{ secrets.ARM_CLIENT_ID }} --client-secret ${{ secrets.ARM_CLIENT_SECRET }}
 
       - name: Set up kubectl
         uses: azure/setup-kubectl@v3
@@ -34,10 +36,13 @@ jobs:
         with:
           version: 'latest'
       
-      - name: Add SonarQube Helm repository
-        run: |
-          pwd
-          ls -la
+      # - name: Add SonarQube Helm repository
+      #   run: |
+      #     az aks get-credentials \
+      #       --resource-group ${{ secrets.AKS_CLUSTER_RESOURCE_GROUP }} \
+      #       --name ${{ secrets.AKS_CLUSTER_NAME }} \
+      #       --overwrite-existing          
+
 
       - name: Add SonarQube Helm repository
         run: |
