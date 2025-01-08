@@ -33,6 +33,11 @@ jobs:
         uses: azure/setup-helm@v3
         with:
           version: 'latest'
+      
+      - name: Add SonarQube Helm repository
+        run: |
+          pwd
+          ls -la
 
       - name: Add SonarQube Helm repository
         run: |
