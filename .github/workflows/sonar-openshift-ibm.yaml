@@ -56,6 +56,6 @@ jobs:
     - name: anyadir librerias y desplegar helm
       run: |
         helm repo add sonarqube https://SonarSource.github.io/helm-chart-sonarqube
-        helm install my-sonarqube sonarqube/sonarqube --namespace sonarqube -f values-sonar.yaml --set Openshift.route.host=sonar-default.${{steps.domain-step.outputs.dominio}}
-      working-directory: ./chart/sonarqube
+        helm install my-sonarqube sonarqube/sonarqube --namespace sonarqube -f values-sonar.yaml --set OpenShift.route.host="sonar-default.${{steps.domain-step.outputs.dominio}}"
+      working-directory: ./charts/sonarqube
     
