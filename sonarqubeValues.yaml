@@ -20,7 +20,3 @@ startupProbe:
   initialDelaySeconds: 800
 
 
-jdbcOverwrite:
-  enabled: false  
-
-
