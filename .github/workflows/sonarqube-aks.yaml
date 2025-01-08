@@ -24,7 +24,7 @@ jobs:
         run: |
           az aks get-credentials --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AKS_CLUSTER_NAME }}
           
-          kubelogin convert-kubeconfig -l spn --client-id ${{ secrets.ARM_CLIENT_ID }} --client-secret ${{ secrets.ARM_CLIENT_SECRET }}
+          kubelogin convert-kubeconfig -l spn --client-id ${{ secrets.AZURE_CLIENT_ID }} --client-secret ${{ secrets.AZURE_CLIENT_SECRET }}
 
       - name: Set up kubectl
         uses: azure/setup-kubectl@v3
