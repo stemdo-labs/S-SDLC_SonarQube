@@ -3,9 +3,9 @@ jdbcOverwrite:
   jdbcUrl: "jdbc:postgresql://myPostgress/myDatabase"
   jdbcUsername: "sonarUser"
   jdbcPassword: "sonarPass"
-  oracleJdbcDriver:
-    url: "https://download.oracle.com/otn-pub/otn_software/jdbc/2113/ojdbc11.jar"
-    netrcCreds: ""
+  # oracleJdbcDriver:
+  #   url: "https://download.oracle.com/otn-pub/otn_software/jdbc/2113/ojdbc11.jar"
+  #   netrcCreds: ""
 service:
   type: LoadBalancer
 resources:
