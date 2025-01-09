@@ -47,7 +47,6 @@ jobs:
       - name: Add SonarQube Helm repository
         run: |
           helm repo add sonarqube https://SonarSource.github.io/helm-chart-sonarqube
-          helm template --create-namespace -n sonarqube sonarqube sonarqube/sonarqube
           helm repo update
 
       - name: Deploy SonarQube
