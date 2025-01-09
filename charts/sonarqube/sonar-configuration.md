@@ -1,8 +1,11 @@
 # Implementación SonarQube en Workflows
 
+
+# Método 1
+
 ## PreConfiguracion
 
-Para la configuracion del análisis en sonar es necesario disponer de un fichero `sonar-project.properties`, donde dentro se va a poder definir ciertas variables que condicionan el análisis.
+En este método, para la configuración del análisis en sonar es necesario disponer de un fichero `sonar-project.properties`, donde dentro se va a poder definir ciertas variables que condicionan el análisis.
 
 ## Configuracion Básica 
 ```Bash
@@ -52,3 +55,45 @@ sonar.issue.ignore.multicriteria.e1.resourceKey=**/*.spec.js
 sonar.log.level=DEBUG
 sonar.log.file=sonar.log
 ```
+
+
+
+# Método 2
+
+- La configuración se puede realizar en el workflow directamente añadiendo los siguientes steps:
+
+```yaml
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      # El uso del siguiente step determina si es bloqueante o no la pipeline, a partir del Quality Gate
+      - uses: sonarsource/sonarqube-quality-gate-action@master
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+```
+
+- La configuración se hace en el step 2 haciendo uso de la action `sonarsource/sonarqube-scan-action@master`, declarando variables de la siguiente manera:
+
+```yaml
+- uses: SonarSource/sonarqube-scan-action@<action version>
+  env:
+    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+  with:
+    projectBaseDir: app/src
+    args: >
+    -Dsonar.organization=my-organization # For SonarQube Cloud only
+    -Dsonar.projectKey=my-projectkey
+    -Dsonar.python.coverage.reportPaths=coverage.xml
+    -Dsonar.sources=lib/
+    -Dsonar.tests=tests/
+    -Dsonar.test.exclusions=tests/**
+    -Dsonar.verbose=true
+```
+***Si no se hace uso del fichero .properties es MANDATORY declarar la variable -Dsonar.projectKey=my-projectKey, luego todo lo demas es opcional**
