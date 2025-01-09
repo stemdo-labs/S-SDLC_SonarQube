@@ -5,7 +5,45 @@
 
 ## PreConfiguracion
 
+1) Creamos un proyecto de manera "Manually"
+2) Rellenamos los parametros con el nombre del projecto, la projectKey y la rama:
+   
+![image](https://github.com/user-attachments/assets/bad85f48-f8a8-427c-8469-ce24be766e17)
+
+4) Seleccionamos ejecutal el CI con GHA
+
+![image](https://github.com/user-attachments/assets/363d616e-db50-4625-b92d-51e2e337c87e)
+
+5) Finalmente seguimos los pasos Mencionados:
+
+    *Agregar Secretos al repositorio*
+
+![image](https://github.com/user-attachments/assets/d4dcad84-ea70-4fce-aa56-d013f940795b)
+
+*Luego creamos un fichro en el repositorio llamado sonar-project.properties*, metiendole (REQUIRED) lo siguiente:
+`sonar.projectKey=prueba-sonar`
+
+6) Finalmente añadimos al workflow los siguientes steps:
+```yaml
+steps:
+  - uses: actions/checkout@v2
+    with:
+      fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+  - uses: sonarsource/sonarqube-scan-action@master
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+  # If you wish to fail your job when the Quality Gate is red, uncomment the
+  # following lines. This would typically be used to fail a deployment.
+  # - uses: sonarsource/sonarqube-quality-gate-action@master
+  #   timeout-minutes: 5
+  #   env:
+  #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+```
+
 En este método, para la configuración del análisis en sonar es necesario disponer de un fichero `sonar-project.properties`, donde dentro se va a poder definir ciertas variables que condicionan el análisis.
+
+7) Probar el Workflow.
 
 ## Configuracion Básica 
 ```Bash
@@ -60,7 +98,7 @@ sonar.log.file=sonar.log
 
 # Método 2
 
-- La configuración se puede realizar en el workflow directamente añadiendo los siguientes steps:
+- **Para este método no es necesario crear un proyecto manualmente en la interfaz de SonarQube** y la configuración se puede realizar en el workflow directamente añadiendo los siguientes steps:
 
 ```yaml
     steps:
