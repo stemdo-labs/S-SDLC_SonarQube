@@ -21,6 +21,13 @@ OpenShift:
     annotations:
       haproxy.router.openshift.io/timeout: 1m
 
+plugins:
+  install:
+    - https://github.com/mc1arke/sonarqube-community-branch-plugin/releases/download/9.9.8/sonarqube-community-branch-plugin-9.9.8.jar
+sonarProperties:
+  sonar.web.javaAdditionalOpts: "-javaagent:/opt/sonarqube/extensions/plugins/sonarqube-community-branch-plugin-9.9.8.jar=web"
+  sonar.ce.javaAdditionalOpts: "-javaagent:/opt/sonarqube/extensions/plugins/sonarqube-community-branch-plugin-9.9.8.jar=ce"
+
 postgresql:
   securityContext:
     enabled: false
