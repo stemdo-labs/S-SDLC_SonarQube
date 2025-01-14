@@ -24,8 +24,28 @@ Siendo el `1.23.0` la versión del plugin siguiendo esta rúbrica:
 | 10.4              | 1.19.0         |
 | 9.9 (LTS)         | 1.14.0         |
 
-## Implementación del plugin dentro de SonarQube
+## Implementación del plugin en GitHub Actions
 
-Para usar el plugin crearemos un proyecto en la pestaña de `Projects` en el desplegable `Create Project/Local project`
+Para una explicación sencilla de como usar el plugin creare un proyecto en la pestaña de `Projects` en el desplegable `Create Project/Local project`
 
 ![alt text](image.png)
+
+La configuración empezará pidiendo un nombre para nuestro proyecto
+
+![alt text](image-1.png)
+
+Y la configuración que deseemos, en mi caso la global
+
+![alt text](image-2.png)
+
+En el método que queremos usar el analisis elegiré GitHub Actions
+
+![alt text](image-3.png)
+
+### Primera parte - Crear secretos de GitHub
+
+SonarQube nos especificará cómo debemos de crear 2 secretos de repositorio de GitHub con sus respectivos valores
+
+![alt text](image-4.png)
+
+![alt text](image-5.png)
