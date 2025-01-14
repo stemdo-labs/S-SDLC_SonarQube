@@ -1,6 +1,6 @@
 image:
   repository: "sonarqube"
-  tag: "9.9.8-community"
+  tag: "24.12.0.100206-community"
 readinessProbe:
   initialDelaySeconds: 500
 livenessProbe:
@@ -29,3 +29,10 @@ postgresql:
 
 elasticsearch:
   bootstrapChecks:  false
+
+plugins:
+  install:
+    - https://github.com/mc1arke/sonarqube-community-branch-plugin/releases/download/1.23.0/sonarqube-community-branch-plugin-1.23.0.jar
+sonarProperties:
+  sonar.web.javaAdditionalOpts: "-javaagent:/opt/sonarqube/extensions/plugins/sonarqube-community-branch-plugin-1.23.0.jar=web"
+  sonar.ce.javaAdditionalOpts: "-javaagent:/opt/sonarqube/extensions/plugins/sonarqube-community-branch-plugin-1.23.0.jar=ce"
