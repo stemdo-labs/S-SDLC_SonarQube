@@ -1,4 +1,4 @@
-# Implemetación de plugin multibranch en SonarQube
+# Implemetación de Community Branch Plugin en SonarQube
 
 ## Implementación en el chart
 
@@ -69,7 +69,7 @@ Usando `sonar.branch.name` podremos especificar las ramas que queremos que anali
 
 ```properties
 sonar.branch.name=develop
-sonar.branch.name=build
+sonar.branch.name=main
 ```
 
 ### Ramas de las Pull requests
