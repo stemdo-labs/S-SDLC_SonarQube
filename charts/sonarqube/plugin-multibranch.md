@@ -65,7 +65,7 @@ Una vez hecho todo esto podremos empezar a usar SonarQube diferenciando entre ra
 
 ### Varias ramas a la vez
 
-Usando `sonar.branch.name` podremos especificar las ramas que queremos que analice al ejecutar el workflow.
+Usando `sonar.branch.name` podremos especificar las ramas que queremos que analice al ejecutar el workflow, esto analizará el código que le especifiquemos de esa rama.
 
 ```properties
 sonar.branch.name=develop
@@ -74,7 +74,7 @@ sonar.branch.name=build
 
 ### Ramas de las Pull requests
 
-De esta otra forma podemos analizar el código de la la rama que va a mergearse con nuestra rama base de la pull request.
+De esta otra forma podemos analizar solo el código modificado de la la rama que va a mergearse con nuestra rama base de la pull request.
 
 ```properties
 sonar.pullrequest.key=${{ github.event.number }}
