@@ -36,3 +36,13 @@ plugins:
 sonarProperties:
   sonar.web.javaAdditionalOpts: "-javaagent:/opt/sonarqube/extensions/plugins/sonarqube-community-branch-plugin-1.23.0.jar=web"
   sonar.ce.javaAdditionalOpts: "-javaagent:/opt/sonarqube/extensions/plugins/sonarqube-community-branch-plugin-1.23.0.jar=ce"
+
+resources:
+  limits:
+    cpu: 600m
+    memory: 4096M
+    ephemeral-storage: 50Gi
+  requests:
+    cpu: 300m
+    memory: 2048M
+    ephemeral-storage: 10Gi
