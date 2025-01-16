@@ -39,10 +39,10 @@ sonarProperties:
 
 resources:
   limits:
-    cpu: 600m
-    memory: 4096M
-    ephemeral-storage: 50Gi
-  requests:
-    cpu: 300m
-    memory: 2048M
+    cpu: 200m
+    memory: 3072M
     ephemeral-storage: 10Gi
+  requests:
+    cpu: 100m
+    memory: 1536M
+    ephemeral-storage: 5Gi
