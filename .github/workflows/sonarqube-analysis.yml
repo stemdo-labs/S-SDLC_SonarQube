@@ -1,0 +1,52 @@
+name: SonarQube Analysis
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        required: true
+      project_key:
+        type: string
+        required: true
+
+jobs:
+  build:
+    name: Build and analyze
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: sonarsource/sonarqube-scan-action@v4
+        id: sonarqube
+        with:
+          args: >
+            -Dsonar.projectVersion=${{ inputs.version }}
+            -Dsonar.qualitygate.wait=true
+            -Dsonar.projectKey=${{ inputs.project_key }}
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_USER_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        continue-on-error: true
+
+      - name: Generar reporte
+        run: |
+          curl -u ${{ secrets.SONAR_USER_TOKEN }}: "${{ secrets.SONAR_HOST_URL }}/api/project_analyses/search?project=${{ inputs.project_key }}" > report.json
+          cat report.json | jq . > analyses.json
+          jq '.analyses[] | select(.projectVersion == "${{ inputs.version }}")' analyses.json > sonar-report.json
+
+      - name: Upload SonarQube report artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: sonar-report
+          path: sonar-report.json
+
+      - name: Evaluate SonarQube Result
+        run: |
+          if [ "${{ steps.sonarqube.outcome }}" != "success" ]; then
+            echo "SonarQube step failed with outcome: ${{ steps.sonarqube.outcome }}"
+            exit 1
+          fi
