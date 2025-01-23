@@ -61,7 +61,7 @@ jobs:
           jq '.analyses[] | select(.projectVersion == "${{ inputs.version }}")' analyses.json > sonar-report.json
 
       - name: Upload SonarQube report artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: sonar-report
           path: sonar-report.json
