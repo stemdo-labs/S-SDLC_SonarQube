@@ -46,3 +46,5 @@ resources:
     cpu: 200m
     memory: 1792M
     ephemeral-storage: 8Gi
+
+monitoringPasscode: "define_it"
