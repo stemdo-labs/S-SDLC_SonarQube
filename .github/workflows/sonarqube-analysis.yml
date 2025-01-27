@@ -42,7 +42,9 @@ jobs:
         if: contains(steps.repo_name.outputs.REPO_NAME, 'backend')
         run: mvn clean package -DskipTests
 
-      - uses: sonarsource/sonarqube-scan-action@v4
+      - name: Análisis de rama
+        uses: sonarsource/sonarqube-scan-action@v4
+        if: github.event_name == 'workflow_dispatch' || contains(inputs.entorno, 'production')
         id: sonarqube
         with:
           args: >
@@ -50,6 +52,24 @@ jobs:
             -Dsonar.qualitygate.wait=true
             -Dsonar.projectKey=${{ inputs.project_key }}
             -Dsonar.sonar.branch.name=${{ github.head_ref }}
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        continue-on-error: true
+
+      - name: Análisis en pull request
+        if: github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.base_ref == 'develop')
+        uses: sonarsource/sonarqube-scan-action@v4
+        if: contains(steps.repo_name.outputs.REPO_NAME, 'production')
+        id: sonarqube
+        with:
+          args: >
+            -Dsonar.projectVersion=${{ inputs.version }}
+            -Dsonar.qualitygate.wait=true
+            -Dsonar.projectKey=${{ inputs.project_key }}
+            -Dsonar.pullrequest.key=${{ github.event.number }}
+            -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }}
+            -Dsonar.pullrequest.branch=${{ github.head_ref }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
