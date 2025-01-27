@@ -77,14 +77,12 @@ jobs:
       - name: Generar reporte
         run: |
           curl -u ${{ secrets.SONAR_USER_TOKEN }}: "${{ secrets.SONAR_HOST_URL }}/api/issues/search?components=${{ inputs.project_key }}" > report.json
-          cat report.json | jq . > analyses.json
-          jq '.analyses[] | select(.projectVersion == "${{ inputs.version }}")' analyses.json > sonar-report.json
 
       - name: Upload SonarQube report artifact
         uses: actions/upload-artifact@v4
         with:
           name: sonar-report
-          path: sonar-report.json
+          path: report.json
 
       - name: Evaluate SonarQube Result
         if: github.event_name == 'workflow_dispatch' || contains(inputs.entorno, 'production')
