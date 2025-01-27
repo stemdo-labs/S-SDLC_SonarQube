@@ -76,7 +76,7 @@ jobs:
 
       - name: Generar reporte
         run: |
-          curl -u ${{ secrets.SONAR_USER_TOKEN }}: "${{ secrets.SONAR_HOST_URL }}/api/project_analyses/search?project=${{ inputs.project_key }}" > report.json
+          curl -u ${{ secrets.SONAR_USER_TOKEN }}: "${{ secrets.SONAR_HOST_URL }}/api/issues/search?components=${{ inputs.project_key }}" > report.json
           cat report.json | jq . > analyses.json
           jq '.analyses[] | select(.projectVersion == "${{ inputs.version }}")' analyses.json > sonar-report.json
 
