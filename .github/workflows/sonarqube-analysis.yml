@@ -58,7 +58,7 @@ jobs:
         continue-on-error: true
 
       - name: Análisis en pull request
-        if: github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.base_ref == 'develop')
+        if: (github.event_name == 'pull_request' && github.base_ref == 'develop')
         uses: sonarsource/sonarqube-scan-action@v4
         id: sonarqube_pr
         with:
