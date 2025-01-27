@@ -43,8 +43,8 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Análisis de rama
-        uses: sonarsource/sonarqube-scan-action@v4
         if: github.event_name == 'workflow_dispatch' || contains(inputs.entorno, 'production')
+        uses: sonarsource/sonarqube-scan-action@v4
         id: sonarqube
         with:
           args: >
@@ -60,7 +60,6 @@ jobs:
       - name: Análisis en pull request
         if: github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.base_ref == 'develop')
         uses: sonarsource/sonarqube-scan-action@v4
-        if: contains(steps.repo_name.outputs.REPO_NAME, 'production')
         id: sonarqube
         with:
           args: >
