@@ -1,6 +1,9 @@
+community:
+  enabled: true
+  buildNumber: "24.12.0.100206"
 image:
   repository: "sonarqube"
-  tag: "24.12.0.100206-community"
+
 readinessProbe:
   initialDelaySeconds: 500
 livenessProbe:

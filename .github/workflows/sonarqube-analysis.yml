@@ -12,6 +12,9 @@ on:
       entorno:
         type: string
         required: true
+      rama:
+        type: string
+        required: true
 
 jobs:
   build:
@@ -51,7 +54,7 @@ jobs:
             -Dsonar.projectVersion=${{ inputs.version }}
             -Dsonar.qualitygate.wait=true
             -Dsonar.projectKey=${{ inputs.project_key }}
-            -Dsonar.sonar.branch.name=${{ github.head_ref }}
+            -Dsonar.sonar.branch.name=${{ inputs.rama }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
