@@ -76,7 +76,7 @@ jobs:
 
       - name: Generar reporte
         run: |
-          curl -u ${{ secrets.SONAR_USER_TOKEN }}: "${{ secrets.SONAR_HOST_URL }}/api/issues/search?components=${{ inputs.project_key }}" > report.json
+          curl -u ${{ secrets.SONAR_USER_TOKEN }}: "${{ secrets.SONAR_HOST_URL }}/api/issues/search?components=${{ inputs.project_key }}&branch=${{ github.head_ref }}" > report.json
 
       - name: Upload SonarQube report artifact
         uses: actions/upload-artifact@v4
