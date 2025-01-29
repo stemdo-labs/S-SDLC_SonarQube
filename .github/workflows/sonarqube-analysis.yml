@@ -93,7 +93,7 @@ jobs:
           name: sonar-report
           path: report.json
 
-      - name: Evaluate SonarQube Result
+      - name: Evaluate SonarQube Result branch
         if: github.event_name == 'workflow_dispatch' || contains(inputs.entorno, 'production')
         run: |
           if [ "${{ steps.sonarqube.outcome }}" != "success" ] && [ "${{ inputs.entorno }}" == "production" ]; then
@@ -101,8 +101,8 @@ jobs:
             exit 1
           fi
 
-      - name: Evaluate SonarQube Result
-        if: github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.base_ref == 'develop')
+      - name: Evaluate SonarQube Result PR
+        if: (github.event_name == 'pull_request' && github.base_ref == 'develop')
         run: |
           if [ "${{ steps.sonarqube_pr.outcome }}" != "success" ] && [ "${{ inputs.entorno }}" == "production" ]; then
             echo "SonarQube step failed with outcome: ${{ steps.sonarqube_pr.outcome }}"
