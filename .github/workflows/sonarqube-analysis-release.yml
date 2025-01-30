@@ -1,0 +1,79 @@
+name: SonarQube Analysis
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        required: true
+      project_key:
+        type: string
+        required: true
+      entorno:
+        type: string
+        required: true
+      rama:
+        type: string
+        required: true
+
+jobs:
+  build:
+    name: Build and analyze
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.entorno }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extraer nombre del proyecto
+        id: repo_name
+        run: |
+          REPO_NAME=$(echo "${{ github.repository }}" | cut -d'/' -f2)
+          if [[ "$REPO_NAME" == *"backend"* ]]; then
+            echo "REPO_NAME=$REPO_NAME" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set up JDK
+        if: contains(steps.repo_name.outputs.REPO_NAME, 'backend')
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Compile project
+        if: contains(steps.repo_name.outputs.REPO_NAME, 'backend')
+        run: mvn clean package -DskipTests
+
+      - name: Análisis de rama
+        uses: sonarsource/sonarqube-scan-action@v4
+        id: sonarqube
+        with:
+          args: >
+            -Dsonar.projectVersion=${{ inputs.version }}
+            -Dsonar.qualitygate.wait=true
+            -Dsonar.projectKey=${{ inputs.project_key }}
+            -Dsonar.sonar.branch.name=${{ inputs.rama }}
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        continue-on-error: true
+
+      - name: Generar reporte rama
+        if: github.event_name == 'workflow_dispatch' || contains(inputs.entorno, 'production')
+        run: |
+          curl -u ${{ secrets.SONAR_USER_TOKEN }}: "${{ secrets.SONAR_HOST_URL }}/api/issues/search?components=${{ inputs.project_key }}&branch=${{ inputs.rama }}" > report.json
+
+      - name: Upload SonarQube report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonar-report
+          path: report.json
+
+      - name: Evaluate SonarQube Result branch
+        if: github.event_name == 'workflow_dispatch' || contains(inputs.entorno, 'production')
+        run: |
+          if [ "${{ steps.sonarqube.outcome }}" != "success" ] && [ "${{ inputs.entorno }}" == "production" ]; then
+            echo "SonarQube step failed with outcome: ${{ steps.sonarqube.outcome }}"
+            exit 1
+          fi
