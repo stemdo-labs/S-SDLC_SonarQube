@@ -78,7 +78,7 @@ jobs:
         continue-on-error: true
 
       - name: Generar reporte rama
-        if: github.event_name == 'workflow_dispatch' || contains(inputs.entorno, 'production')
+        if: github.event_name == 'workflow_dispatch' || contains(inputs.entorno, 'production') || github.event_name == 'release'
         run: |
           curl -u ${{ secrets.SONAR_USER_TOKEN }}: "${{ secrets.SONAR_HOST_URL }}/api/issues/search?components=${{ inputs.project_key }}&branch=${{ inputs.rama }}" > report.json
 
