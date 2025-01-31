@@ -90,11 +90,11 @@ jobs:
       - name: Upload SonarQube report artifact
         uses: actions/upload-artifact@v4
         with:
-          name: sonar-report
+          name: artifact1
           path: report.json
 
       - name: Evaluate SonarQube Result branch
-        if: github.event_name == 'workflow_dispatch' || contains(inputs.entorno, 'production')
+        if: github.event_name == 'workflow_dispatch' || contains(inputs.entorno, 'production') || github.event_name == 'release'
         run: |
           if [ "${{ steps.sonarqube.outcome }}" != "success" ] && [ "${{ inputs.entorno }}" == "production" ]; then
             echo "SonarQube step failed with outcome: ${{ steps.sonarqube.outcome }}"
