@@ -9,7 +9,7 @@ on:
       project_key:
         type: string
         required: true
-      entorno:
+      entorno_release:
         type: string
         required: true
       rama:
