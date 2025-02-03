@@ -28,10 +28,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ inputs.entorno }}
     steps:
-      - name: Comprobar input entorno
-        run: |
-          echo "${{ inputs.entorno_release }}"
-
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
