@@ -30,7 +30,7 @@ jobs:
     steps:
       - name: Comprobar input entorno
         run: |
-          echo "${{ inputs.entorno }}"
+          echo "${{ inputs.entorno_release }}"
 
       - uses: actions/checkout@v4
         with:
