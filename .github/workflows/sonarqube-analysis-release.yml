@@ -21,6 +21,12 @@ on:
       entorno:
         type: string
         required: true
+      product_type_name:
+        type: string
+        required: true
+      product_name:
+        type: string
+        required: true
 
 jobs:
   build:
@@ -86,8 +92,8 @@ jobs:
           enviroment: ${{ inputs.entorno_release }}
           report: "./sonar-report.json"
           defectdojo_url: ${{ secrets.DEFECTDOJO_URL }}
-          product_type_name: Full Stack Develop
-          product_name: Orquestas Stemdo Develop
+          product_type_name: ${{ inputs.product_type_name }}
+          product_name: ${{ inputs.product_name }}
 
       - name: Evaluate SonarQube Result branch
         run: |
