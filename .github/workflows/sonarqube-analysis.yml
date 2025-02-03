@@ -18,6 +18,9 @@ on:
       release_name:
         type: string
         required: true
+      entorno:
+        type: string
+        required: true
 
 jobs:
   build:
@@ -25,6 +28,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ inputs.entorno }}
     steps:
+      - name: Comprobar input entorno
+        run: |
+          echo "${{ inputs.entorno }}"
+
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -104,7 +111,7 @@ jobs:
           product_id: "1"
           release_name: ${{ inputs.release_name }}
           scan_type: "SonarQube Scan"
-          enviroment: ${{ inputs.entorno }}
+          enviroment: ${{ inputs.entorno_release }}
           report: "./sonar-report.json"
           defectdojo_url: ${{ secrets.DEFECTDOJO_URL }}
 
