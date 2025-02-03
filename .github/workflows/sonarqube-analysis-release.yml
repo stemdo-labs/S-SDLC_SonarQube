@@ -86,8 +86,8 @@ jobs:
           enviroment: ${{ inputs.entorno_release }}
           report: "./sonar-report.json"
           defectdojo_url: ${{ secrets.DEFECTDOJO_URL }}
-          product_type_name: Full Stack Nuevo
-          product_name: Orquestas Stemdo Nuevo
+          product_type_name: Full Stack Develop
+          product_name: Orquestas Stemdo Develop
 
       - name: Evaluate SonarQube Result branch
         run: |
