@@ -66,7 +66,6 @@ jobs:
         continue-on-error: true
 
       - name: Generar reporte rama
-        if: github.event_name == 'workflow_dispatch' || contains(inputs.entorno, 'production') || github.event_name == 'release'
         run: |
           curl -u ${{ secrets.SONAR_USER_TOKEN }}: "${{ secrets.SONAR_HOST_URL }}/api/issues/search?components=${{ inputs.project_key }}&branch=${{ inputs.rama }}" > sonar-report.json
 
@@ -91,7 +90,6 @@ jobs:
           product_name: Orquestas Stemdo
 
       - name: Evaluate SonarQube Result branch
-        if: github.event_name == 'workflow_dispatch' || contains(inputs.entorno, 'production') || github.event_name == 'release'
         run: |
           if [ "${{ steps.sonarqube.outcome }}" != "success" ] && [ "${{ inputs.entorno }}" == "production" ]; then
             echo "SonarQube step failed with outcome: ${{ steps.sonarqube.outcome }}"
