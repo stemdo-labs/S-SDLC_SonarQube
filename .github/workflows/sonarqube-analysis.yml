@@ -110,6 +110,8 @@ jobs:
           enviroment: ${{ inputs.entorno_release }}
           report: "./sonar-report.json"
           defectdojo_url: ${{ secrets.DEFECTDOJO_URL }}
+          product_type_name: Full Stack
+          product_name: Orquestas Stemdo
 
       - name: Evaluate SonarQube Result branch
         if: github.event_name == 'workflow_dispatch' || contains(inputs.entorno, 'production') || github.event_name == 'release'
