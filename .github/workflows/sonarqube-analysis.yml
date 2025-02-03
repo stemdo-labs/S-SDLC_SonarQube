@@ -15,6 +15,9 @@ on:
       rama:
         type: string
         required: true
+      release_name:
+        type: string
+        required: true
 
 jobs:
   build:
@@ -99,7 +102,7 @@ jobs:
           defectdojo_user: "admin"
           defectdojo_password: ${{ secrets.DEFECTDOJO_PASSWORD }}
           product_id: "1"
-          release_name: "Prueba Dojo 2"
+          release_name: ${{ inputs.release_name }}
           scan_type: "SonarQube Scan"
           enviroment: ${{ inputs.entorno }}
           report: "./sonar-report.json"
