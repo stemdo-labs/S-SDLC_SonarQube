@@ -97,7 +97,7 @@ jobs:
           path: sonar-report.json
 
       - name: Subir reporte a DefectDojo
-        uses: stemdo-labs/S-SDLC_DefectDojo/.github/actions/upload-security-report@feature/action-defectdojo
+        uses: stemdo-labs/S-SDLC_DefectDojo/.github/actions/upload-security-report@main
         with:
           defectdojo_user: "admin"
           defectdojo_password: ${{ secrets.DEFECTDOJO_PASSWORD }}
