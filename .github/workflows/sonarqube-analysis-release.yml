@@ -9,7 +9,13 @@ on:
       project_key:
         type: string
         required: true
+      entorno_release:
+        type: string
+        required: true
       rama:
+        type: string
+        required: true
+      release_name:
         type: string
         required: true
       entorno:
@@ -46,7 +52,6 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Análisis de rama
-        if: github.event_name == 'workflow_dispatch' || contains(inputs.entorno, 'production')
         uses: sonarsource/sonarqube-scan-action@v4
         id: sonarqube
         with:
@@ -60,32 +65,10 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         continue-on-error: true
 
-      - name: Análisis en pull request
-        if: (github.event_name == 'pull_request' && github.base_ref == 'develop')
-        uses: sonarsource/sonarqube-scan-action@v4
-        id: sonarqube_pr
-        with:
-          args: >
-            -Dsonar.projectVersion=${{ inputs.version }}
-            -Dsonar.qualitygate.wait=true
-            -Dsonar.projectKey=${{ inputs.project_key }}
-            -Dsonar.pullrequest.key=${{ github.event.number }}
-            -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }}
-            -Dsonar.pullrequest.branch=${{ github.head_ref }}
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        continue-on-error: true
-
       - name: Generar reporte rama
-        if: github.event_name == 'workflow_dispatch' || contains(inputs.entorno, 'production')
+        if: github.event_name == 'workflow_dispatch' || contains(inputs.entorno, 'production') || github.event_name == 'release'
         run: |
           curl -u ${{ secrets.SONAR_USER_TOKEN }}: "${{ secrets.SONAR_HOST_URL }}/api/issues/search?components=${{ inputs.project_key }}&branch=${{ inputs.rama }}" > sonar-report.json
-
-      - name: Generar reporte pull request
-        if: (github.event_name == 'pull_request' && github.base_ref == 'develop')
-        run: |
-          curl -u ${{ secrets.SONAR_USER_TOKEN }}: "${{ secrets.SONAR_HOST_URL }}/api/issues/search?components=${{ inputs.project_key }}&branch=${{ github.head_ref }}" > sonar-report.json
 
       - name: Upload SonarQube report artifact
         uses: actions/upload-artifact@v4
@@ -93,18 +76,24 @@ jobs:
           name: sonar-report
           path: sonar-report.json
 
+      - name: Subir reporte a DefectDojo
+        uses: stemdo-labs/S-SDLC_DefectDojo/.github/actions/upload-security-report@main
+        with:
+          defectdojo_user: "admin"
+          defectdojo_password: ${{ secrets.DEFECTDOJO_PASSWORD }}
+          product_id: "1"
+          release_name: ${{ inputs.release_name }}
+          scan_type: "SonarQube Scan"
+          enviroment: ${{ inputs.entorno_release }}
+          report: "./sonar-report.json"
+          defectdojo_url: ${{ secrets.DEFECTDOJO_URL }}
+          product_type_name: Full Stack
+          product_name: Orquestas Stemdo
+
       - name: Evaluate SonarQube Result branch
         if: github.event_name == 'workflow_dispatch' || contains(inputs.entorno, 'production') || github.event_name == 'release'
         run: |
           if [ "${{ steps.sonarqube.outcome }}" != "success" ] && [ "${{ inputs.entorno }}" == "production" ]; then
             echo "SonarQube step failed with outcome: ${{ steps.sonarqube.outcome }}"
-            exit 1
-          fi
-
-      - name: Evaluate SonarQube Result PR
-        if: (github.event_name == 'pull_request' && github.base_ref == 'develop')
-        run: |
-          if [ "${{ steps.sonarqube_pr.outcome }}" != "success" ] && [ "${{ inputs.entorno }}" == "production" ]; then
-            echo "SonarQube step failed with outcome: ${{ steps.sonarqube_pr.outcome }}"
             exit 1
           fi
