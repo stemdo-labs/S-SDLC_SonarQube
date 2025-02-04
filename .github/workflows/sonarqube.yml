@@ -73,6 +73,10 @@ jobs:
           defectdojo_user: ${{ secrets.DEFECTDOJO_USER }}
           defectdojo_password: ${{ secrets.DEFECTDOJO_PASSWORD }}
 
+      - name: Summary
+        run: |
+          echo "Hola mundo" >> $GITHUB_STEP_SUMMARY
+
       - name: Evaluate SonarQube Result branch
         run: |
           if [ "${{ steps.sonarqube.outcome }}" != "success" ]; then
