@@ -30,10 +30,6 @@ jobs:
     name: SonarQube Analysis
     runs-on: ubuntu-latest
     steps:
-      # - uses: actions/checkout@v4
-      #   with:
-      #     fetch-depth: 0
-
       - name: Analysis
         uses: sonarsource/sonarqube-scan-action@v4
         id: sonarqube
