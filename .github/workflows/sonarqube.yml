@@ -38,28 +38,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Extraer nombre del proyecto
-        id: repo_name
-        run: |
-          REPO_NAME=$(echo "${{ github.repository }}" | cut -d'/' -f2)
-          if [[ "$REPO_NAME" == *"backend"* ]]; then
-            echo "REPO_NAME=$REPO_NAME" >> $GITHUB_OUTPUT
-            echo "desarrollo=Backend" >> $GITHUB_OUTPUT
-          else
-            echo "desarrollo=Frontend" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Set up JDK
-        if: contains(steps.repo_name.outputs.REPO_NAME, 'backend')
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: Compile project
-        if: contains(steps.repo_name.outputs.REPO_NAME, 'backend')
-        run: mvn clean package -DskipTests
-
       - name: Análisis de rama
         uses: sonarsource/sonarqube-scan-action@v4
         id: sonarqube
@@ -100,9 +78,6 @@ jobs:
           product_name: ${{ inputs.product_name }}
           title_scan: ${{ steps.repo_name.outputs.desarrollo }}
           version: ${{ inputs.version }}
-        env:
-          defectdojo_user: ${{ secrets.DEFECTDOJO_USER }}
-          defectdojo_password: ${{ secrets.DEFECTDOJO_PASSWORD }}
 
       - name: Evaluate SonarQube Result branch
         run: |
