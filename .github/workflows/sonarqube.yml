@@ -24,6 +24,9 @@ on:
       product_name:
         type: string
         required: true
+      title:
+        type: string
+        required: true
 
 jobs:
   sonarqube:
@@ -64,7 +67,7 @@ jobs:
           defectdojo_url: ${{ secrets.DEFECTDOJO_URL }}
           product_type_name: ${{ inputs.product_type_name }}
           product_name: ${{ inputs.product_name }}
-          title_scan: ${{ inputs.environment_release }}
+          title_scan: ${{ inputs.title }}
           version: ${{ inputs.version }}
         env:
           defectdojo_user: ${{ secrets.DEFECTDOJO_USER }}
