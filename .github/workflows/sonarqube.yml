@@ -70,6 +70,9 @@ jobs:
           product_name: ${{ inputs.product_name }}
           title_scan: ${{ inputs.environment_release }}
           version: ${{ inputs.version }}
+        env:
+          defectdojo_user: ${{ secrets.DEFECTDOJO_USER }}
+          defectdojo_password: ${{ secrets.DEFECTDOJO_PASSWORD }}
 
       - name: Evaluate SonarQube Result branch
         run: |
