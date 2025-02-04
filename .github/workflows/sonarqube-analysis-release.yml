@@ -84,6 +84,10 @@ jobs:
           name: sonar-report
           path: sonar-report.json
 
+      - name: Mostrar titulo
+        run: |
+          echo "${{ steps.repo_name.outputs.desarrollo }}"
+
       - name: Subir reporte a DefectDojo
         uses: stemdo-labs/S-SDLC_DefectDojo/.github/actions/upload-security-report@main
         with:
