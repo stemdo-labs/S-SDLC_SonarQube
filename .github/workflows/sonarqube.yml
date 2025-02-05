@@ -73,13 +73,14 @@ jobs:
           defectdojo_user: ${{ secrets.DEFECTDOJO_USER }}
           defectdojo_password: ${{ secrets.DEFECTDOJO_PASSWORD }}
 
-      - name: Summary
-        run: |
-          echo "Hola mundo" >> $GITHUB_STEP_SUMMARY
-
       - name: Evaluate SonarQube Result branch
         run: |
           if [ "${{ steps.sonarqube.outcome }}" != "success" ]; then
-            echo "SonarQube step failed with outcome: ${{ steps.sonarqube.outcome }}"
+            echo "🚨 **SonarQube Analysis Failed** 🚨" >> $GITHUB_STEP_SUMMARY
+            echo "The SonarQube scan encountered issues. Please review the logs for more details." >> $GITHUB_STEP_SUMMARY
+            echo "Outcome: ${{ steps.sonarqube.outcome }}" >> $GITHUB_STEP_SUMMARY
             exit 1
-          fi
+          else
+            echo "✅ **SonarQube Analysis Passed Successfully** ✅" >> $GITHUB_STEP_SUMMARY
+            echo "The SonarQube analysis completed without any issues. Great job!" >> $GITHUB_STEP_SUMMARY
+          fi 
