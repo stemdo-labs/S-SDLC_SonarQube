@@ -55,11 +55,11 @@ jobs:
           token: ${{ secrets.SONAR_TOKEN }}  # Token para autenticarte en SonarQube
           branch: ${{ github.ref }}  # Pasar la referencia de la release (ej: refs/tags/mi-release-v1.0.0)
           extra-properties: |
-            sonar.branch.name=${{ github.ref_name }}  # Aquí pasamos el nombre de la release como branch.name
-            sonar.sources=src  # Cambia esto si tienes una estructura de proyecto diferente
+            sonar.branch.name=${{ github.ref_name }}
+            sonar.sources=src
+            sonar.host.url: ${{ secrets.SONAR_HOST_URL }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
       - name: Report
         run: |
