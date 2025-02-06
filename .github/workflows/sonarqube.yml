@@ -58,7 +58,7 @@ jobs:
           path: sonarqube-report.json
 
       - name: Upload SonarQube report DefectDojo
-        uses: stemdo-labs/actions/dojo-upload-security-report@dojo-upload-security-report
+        uses: stemdo-labs/actions/dojo-upload-security-report@feature/dojo-upload-security-report
         with:
           release_name: ${{ inputs.release_name }}
           scan_type: "SonarQube Scan"
