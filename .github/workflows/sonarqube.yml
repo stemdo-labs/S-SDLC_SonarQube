@@ -41,13 +41,11 @@ jobs:
             -Dsonar.projectVersion=${{ inputs.version }}
             -Dsonar.qualitygate.wait=true
             -Dsonar.projectKey=${{ inputs.project_key }}
-            -Dsonar.projectTags=${{ inputs.release_name }}
+            -Dsonar.branch.version=${{ inputs.release_name }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         continue-on-error: true
-
-        #sonar.project.version
 
       - name: Report
         run: |
