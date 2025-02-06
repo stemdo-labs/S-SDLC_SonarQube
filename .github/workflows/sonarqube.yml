@@ -79,10 +79,10 @@ jobs:
 
       - name: Evaluate SonarQube Result branch
         run: |
-          if [ "${{ steps.sonarqube.outcome }}" != "success" ]; then
+          if [ "${{ steps.sonarqube.conclusion }}" != "success" ]; then
             echo "🚨 **SonarQube Analysis Failed** 🚨" >> $GITHUB_STEP_SUMMARY
             echo "The SonarQube scan encountered issues. Please review the logs for more details." >> $GITHUB_STEP_SUMMARY
-            echo "Outcome: ${{ steps.sonarqube.outcome }}" >> $GITHUB_STEP_SUMMARY
+            echo "Outcome: ${{ steps.sonarqube.conclusion }}" >> $GITHUB_STEP_SUMMARY
             exit 1
           else
             echo "✅ **SonarQube Analysis Passed Successfully** ✅" >> $GITHUB_STEP_SUMMARY
