@@ -50,7 +50,6 @@ jobs:
       - name: Run SonarQube analysis
         uses: SonarSource/sonarcloud-github-action@v2
         with:
-          organization: ${{ secrets.SONAR_HOST_URL }}  # Reemplaza con tu organización de SonarQube (si usas SonarCloud)
           projectKey: ${{ inputs.project_key }}  # Reemplaza con tu project key de SonarQube
           projectName: 'final-project-gestion-orquestas-backend-aitorcajas'  # Nombre de tu proyecto en SonarQube
           token: ${{ secrets.SONAR_TOKEN }}  # Token para autenticarte en SonarQube
@@ -60,6 +59,7 @@ jobs:
             sonar.sources=src  # Cambia esto si tienes una estructura de proyecto diferente
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
       - name: Report
         run: |
