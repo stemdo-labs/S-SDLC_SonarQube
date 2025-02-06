@@ -33,15 +33,6 @@ jobs:
     name: SonarQube Analysis
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 
-
-      - name: Create a temporary branch
-        run: |
-          git checkout -b release/${{ inputs.release_name }}
-
       - name: Analysis
         uses: sonarsource/sonarqube-scan-action@v4
         id: sonarqube
@@ -50,7 +41,7 @@ jobs:
             -Dsonar.projectVersion=${{ inputs.version }}
             -Dsonar.qualitygate.wait=true
             -Dsonar.projectKey=${{ inputs.project_key }}
-            -Dsonar.branch.name=release/${{ inputs.release_name }}
+            -Dsonar.branch.name=${{ inputs.release_name }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
@@ -58,7 +49,7 @@ jobs:
 
       - name: Report
         run: |
-          curl -u ${{ secrets.SONAR_USER_TOKEN }}: "${{ secrets.SONAR_HOST_URL }}/api/issues/search?components=${{ inputs.project_key }}&branch=release/${{ inputs.release_name }}" > sonarqube-report.json
+          curl -u ${{ secrets.SONAR_USER_TOKEN }}: "${{ secrets.SONAR_HOST_URL }}/api/issues/search?components=${{ inputs.project_key }}&branch=${{ inputs.release_name }}" > sonarqube-report.json
 
       - name: Upload SonarQube report artifact
         uses: actions/upload-artifact@v4
@@ -93,12 +84,3 @@ jobs:
             echo "✅ **SonarQube Analysis Passed Successfully** ✅" >> $GITHUB_STEP_SUMMARY
             echo "The SonarQube analysis completed without any issues. Great job!" >> $GITHUB_STEP_SUMMARY
           fi 
-
-      - name: Delete temporary branch
-        run: |
-          git checkout main
-          git branch -D release/${{ inputs.release_name }}
-  
-      - name: Delete remote temporary branch
-        run: |
-          git push origin --delete release/${{ inputs.release_name }}
