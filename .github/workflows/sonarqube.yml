@@ -33,19 +33,31 @@ jobs:
     name: SonarQube Analysis
     runs-on: ubuntu-latest
     steps:
-      - name: Analysis
-        uses: sonarsource/sonarqube-scan-action@master
-        id: sonarqube
+      # - name: Analysis
+      #   uses: sonarsource/sonarqube-scan-action@v4
+      #   id: sonarqube
+      #   with:
+      #     args: >
+      #       -Dsonar.projectVersion=${{ inputs.version }}
+      #       -Dsonar.qualitygate.wait=true
+      #       -Dsonar.projectKey=${{ inputs.project_key }}
+      #       -Dsonar.branch.name=release-${{ github.event.release.tag_name }}
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      #   continue-on-error: true
+
+      - name: Run SonarQube analysis
+        uses: SonarSource/sonarcloud-github-action@v2
         with:
-          args: >
-            -Dsonar.projectVersion=${{ inputs.version }}
-            -Dsonar.qualitygate.wait=true
-            -Dsonar.projectKey=${{ inputs.project_key }}
-            -Dsonar.branch.name=release-${{ github.event.release.tag_name }}
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        continue-on-error: true
+          organization: ${{ secrets.SONAR_HOST_URL }}  # Reemplaza con tu organización de SonarQube (si usas SonarCloud)
+          projectKey: ${{ inputs.project_key }}  # Reemplaza con tu project key de SonarQube
+          projectName: 'final-project-gestion-orquestas-backend-aitorcajas'  # Nombre de tu proyecto en SonarQube
+          token: ${{ secrets.SONAR_TOKEN }}  # Token para autenticarte en SonarQube
+          branch: ${{ github.ref }}  # Pasar la referencia de la release (ej: refs/tags/mi-release-v1.0.0)
+          extra-properties: |
+            sonar.branch.name=${{ github.ref_name }}  # Aquí pasamos el nombre de la release como branch.name
+            sonar.sources=src  # Cambia esto si tienes una estructura de proyecto diferente
 
       - name: Report
         run: |
