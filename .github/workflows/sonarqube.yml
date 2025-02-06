@@ -58,6 +58,8 @@ jobs:
           extra-properties: |
             sonar.branch.name=${{ github.ref_name }}  # Aquí pasamos el nombre de la release como branch.name
             sonar.sources=src  # Cambia esto si tienes una estructura de proyecto diferente
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Report
         run: |
