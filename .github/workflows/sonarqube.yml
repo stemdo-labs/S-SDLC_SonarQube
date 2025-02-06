@@ -38,14 +38,18 @@ jobs:
         id: sonarqube
         with:
           args: >
-            -Dsonar.projectVersion=${{ inputs.version }}
             -Dsonar.qualitygate.wait=true
             -Dsonar.projectKey=${{ inputs.project_key }}
+            -Dsonar.projectVersion=${{ inputs.release_name }}
+            -Dsonar.branch.name=main
             -Dsonar.branch.version=${{ inputs.release_name }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         continue-on-error: true
+
+#projectTags
+#
 
       - name: Report
         run: |
