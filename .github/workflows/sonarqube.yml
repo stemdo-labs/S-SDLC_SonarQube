@@ -33,6 +33,11 @@ jobs:
     name: SonarQube Analysis
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+
       - name: Create a temporary branch
         run: |
           git checkout -b release/${{ inputs.release_name }}
