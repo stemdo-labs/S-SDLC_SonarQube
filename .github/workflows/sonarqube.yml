@@ -41,7 +41,7 @@ jobs:
             -Dsonar.projectVersion=${{ inputs.version }}
             -Dsonar.qualitygate.wait=true
             -Dsonar.projectKey=${{ inputs.project_key }}
-            -Dsonar.branch.name=main
+            -Dsonar.branch.name=${{ inputs.release_name }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
@@ -49,7 +49,7 @@ jobs:
 
       - name: Report
         run: |
-          curl -u ${{ secrets.SONAR_USER_TOKEN }}: "${{ secrets.SONAR_HOST_URL }}/api/issues/search?components=${{ inputs.project_key }}&branch=main" > sonarqube-report.json
+          curl -u ${{ secrets.SONAR_USER_TOKEN }}: "${{ secrets.SONAR_HOST_URL }}/api/issues/search?components=${{ inputs.project_key }}&branch=${{ inputs.release_name }}" > sonarqube-report.json
 
       - name: Upload SonarQube report artifact
         uses: actions/upload-artifact@v4
