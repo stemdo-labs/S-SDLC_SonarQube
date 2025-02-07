@@ -39,16 +39,13 @@ jobs:
         with:
           args: >
             -Dsonar.qualitygate.wait=true
-            -Dsonar.projectKey=stemdo-labs_final-project-gestion-orquestas-backend-aitorcajas_62fe6ea0-9c41-43cf-85a0-df287a45376e
-            -Dsonar.projectVersion=${{ inputs.release_name }}
-            -Dsonar.branch.name=main
+            -Dsonar.projectKey=${{ inputs.project_key }}
+            -Dsonar.projectVersion=${{ inputs.version }}
+            -Dsonar.branch.name=${{ inputs.branch }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         continue-on-error: true
-
-#projectTags
-#
 
       - name: Report
         run: |
