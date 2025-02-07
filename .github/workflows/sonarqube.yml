@@ -41,7 +41,7 @@ jobs:
             -Dsonar.qualitygate.wait=true
             -Dsonar.projectKey=${{ inputs.project_key }}
             -Dsonar.projectVersion=${{ inputs.version }}
-            -Dsonar.branch.name=${{ inputs.branch }}
+            -Dsonar.sonar.branch.name=${{ inputs.branch }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
