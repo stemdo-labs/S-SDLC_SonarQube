@@ -1,0 +1,86 @@
+name: SonarQube Analysis
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        required: true
+      project_key:
+        type: string
+        required: true
+      branch:
+        type: string
+        required: true
+      release_name:
+        type: string
+        required: true
+      environment_release:
+        type: string
+        required: true
+      product_type_name:
+        type: string
+        required: true
+      product_name:
+        type: string
+        required: true
+      title:
+        type: string
+        required: true
+
+jobs:
+  sonarqube:
+    name: SonarQube Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Analysis
+        uses: sonarsource/sonarqube-scan-action@v4
+        id: sonarqube
+        with:
+          args: >
+            -Dsonar.qualitygate.wait=true
+            -Dsonar.projectKey=${{ inputs.project_key }}
+            -Dsonar.projectVersion=${{ inputs.version }}
+            -Dsonar.branch.name=${{ inputs.branch }}
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        continue-on-error: true
+
+      - name: Report
+        run: |
+          curl -u ${{ secrets.SONAR_USER_TOKEN }}: "${{ secrets.SONAR_HOST_URL }}/api/issues/search?components=${{ inputs.project_key }}&branch=${{ inputs.branch }}" > sonarqube-report.json
+
+      - name: Upload SonarQube report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonarqube-report
+          path: sonarqube-report.json
+
+      - name: Upload SonarQube report DefectDojo
+        uses: stemdo-labs/actions/dojo-upload-security-report@feature/dojo-upload-security-report
+        with:
+          release_name: ${{ inputs.release_name }}
+          scan_type: "SonarQube Scan"
+          enviroment: ${{ inputs.environment_release }}
+          report: "./sonarqube-report.json"
+          defectdojo_url: ${{ secrets.DEFECTDOJO_URL }}
+          product_type_name: ${{ inputs.product_type_name }}
+          product_name: ${{ inputs.product_name }}
+          title_scan: ${{ inputs.title }}
+          version: ${{ inputs.version }}
+        env:
+          defectdojo_user: ${{ secrets.DEFECTDOJO_USER }}
+          defectdojo_password: ${{ secrets.DEFECTDOJO_PASSWORD }}
+
+      - name: Evaluate SonarQube Result branch
+        run: |
+          if [ "${{ steps.sonarqube.outcome }}" != "success" ]; then
+            echo "🚨 **SonarQube Analysis Failed** 🚨" >> $GITHUB_STEP_SUMMARY
+            echo "The SonarQube scan encountered issues. Please review the logs for more details." >> $GITHUB_STEP_SUMMARY
+            echo "Outcome: ${{ steps.sonarqube.outcome }}" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          else
+            echo "✅ **SonarQube Analysis Passed Successfully** ✅" >> $GITHUB_STEP_SUMMARY
+            echo "The SonarQube analysis completed without any issues. Great job!" >> $GITHUB_STEP_SUMMARY
+          fi 
