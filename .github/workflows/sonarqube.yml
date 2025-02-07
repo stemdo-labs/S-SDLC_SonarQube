@@ -39,7 +39,7 @@ jobs:
         with:
           args: >
             -Dsonar.qualitygate.wait=true
-            -Dsonar.projectKey=${{ inputs.project_key }}
+            -Dsonar.projectKey=stemdo-labs_final-project-gestion-orquestas-backend-aitorcajas_62fe6ea0-9c41-43cf-85a0-df287a45376e
             -Dsonar.projectVersion=${{ inputs.version }}
             -Dsonar.branch.name=${{ inputs.release_name }}
         env:
