@@ -40,14 +40,14 @@ sonarProperties:
   sonar.web.javaAdditionalOpts: "-javaagent:/opt/sonarqube/extensions/plugins/sonarqube-community-branch-plugin-1.23.0.jar=web"
   sonar.ce.javaAdditionalOpts: "-javaagent:/opt/sonarqube/extensions/plugins/sonarqube-community-branch-plugin-1.23.0.jar=ce"
 
-# resources:
-#   limits:
-#     cpu: 400m
-#     memory: 3584M
-#     ephemeral-storage: 20Gi
-#   requests:
-#     cpu: 200m
-#     memory: 1792M
-#     ephemeral-storage: 8Gi
+resources:
+  limits:
+    cpu: 400m
+    memory: 3584M
+    ephemeral-storage: 20Gi
+  requests:
+    cpu: 200m
+    memory: 1792M
+    ephemeral-storage: 8Gi
 
 monitoringPasscode: "define_it"
